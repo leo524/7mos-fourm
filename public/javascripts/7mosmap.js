@@ -54,22 +54,19 @@ local.setMarkersSetCallback(function (pois) {
 	    var lng = pois[i].point.lng;
 
 		pois[i].marker.addEventListener("click", function (e) {
-		    
-		    
-		    gc.getLocation(e.point, function(rs){ 
+		    gc.getLocation(e.point, function(rs){
 		    	var title = e.target.K.title;
 		    	var addComp = rs.addressComponents;  
 		        sContent = addComp.province + ", " + addComp.city + ", " +addComp.district+","+ addComp.street + ", " + addComp.streetNumber+","+title ;
 		        document.getElementById("confirmPlace").value=sContent;
-			     document.getElementById("flocation").value=sContent;
-		    }); 
-		    
+			    document.getElementById("flocation").value=sContent;
+		    });
 		     document.getElementById("lat").value=e.point.lat;
 			 document.getElementById("lng").value=e.point.lng;
 		    /*弹出框
 			var infoWindow = new BMap.InfoWindow(sContent, { enableMessage: false });
 			this.openInfoWindow(infoWindow);*/
-
+            $.prompt.close();
 
 		});
            
@@ -111,20 +108,26 @@ function showLocationInfo(pt, rs){
 
 function showMap(){
     var map2 = new BMap.Map("map_view");
+    map2.addControl(new BMap.NavigationControl());
+    map2.addControl(new BMap.ScaleControl());
+    map2.addControl(new BMap.OverviewMapControl());
+    map2.addControl(new BMap.MapTypeControl());
     var lat =  document.getElementById("lat").value;
     var lng =  document.getElementById("lng").value
-    var cplace =  document.getElementById("cplace").value;
-    var point = new BMap.Point(lat,lng);
-    map2.centerAndZoom(point,12);
+
+    var vpoint = new BMap.Point(lng, lat);
+
 // 创建地址解析器实例
     var myGeo = new BMap.Geocoder();
-// 将地址解析结果显示在地图上,并调整地图视野
-    myGeo.getPoint(cplace, function(point){
-        if (point) {
-            map2.centerAndZoom(point, 16);
-            map2.addOverlay(new BMap.Marker(point));
+
+    // 根据坐标得到地址描述
+    myGeo.getLocation(new BMap.Point(lng, lat), function(result){
+        if (result){
+           // alert(lat+"&"+lng+result.address);
+            map2.centerAndZoom(vpoint, 16);
+            map2.addOverlay(new BMap.Marker(vpoint));
         }
-    }, "");
+    });
 
 }
 

@@ -18,7 +18,7 @@ var winston = require('winston'),
 
 (function(PostTools) {
 
-	PostTools.edit = function(uid, pid, title, content,lng,lat,cplace, options, callback) {
+	PostTools.edit = function(uid, pid, title, content, options, callback) {
 		options = options || {};
 
 		async.waterfall([
@@ -40,14 +40,15 @@ var winston = require('winston'),
 				return callback(err);
 			}
 
+			posts.setPostFields(pid, {
+				edited: Date.now(),
+				editor: uid,
+				content: postData.content
+			});
+
+			events.logPostEdit(uid, pid);
+
 			async.parallel({
-				post: function(next) {
-					posts.setPostFields(pid, {
-						edited: Date.now(),
-						editor: uid,
-						content: postData.content
-					}, next);
-				},
 				topic: function(next) {
 					var tid = postData.tid;
 					posts.isMain(pid, function(err, isMainPost) {
@@ -60,44 +61,32 @@ var winston = require('winston'),
 
 							var topicData = {
 								title: title,
-                                lng:lng,
-                                lat:lat,
-                                cplace:cplace,
 								slug: tid + '/' + utils.slugify(title)
 							};
-
 							if (options.topic_thumb) {
 								topicData.thumb = options.topic_thumb;
 							}
-
-							db.setObject('topic:' + tid, topicData, function(err) {
-								plugins.fireHook('action:topic.edit', tid);
-							});
+							db.setObject('topic:' + tid, topicData);
 
 							topics.updateTags(tid, options.tags);
+
+							plugins.fireHook('action:topic.edit', tid);
 						}
+
+						plugins.fireHook('action:post.edit', postData);
 
 						next(null, {
 							tid: tid,
 							title: validator.escape(title),
 							isMainPost: isMainPost
 						});
-
 					});
 
 				},
 				content: function(next) {
 					PostTools.parse(postData.content, next);
 				}
-			}, function(err, results) {
-				if (err) {
-					return callback(err);
-				}
-
-				events.logPostEdit(uid, pid);
-				plugins.fireHook('action:post.edit', postData);
-				callback(null, results);
-			});
+			}, callback);
 		});
 	};
 
@@ -143,7 +132,7 @@ var winston = require('winston'),
 
 				db.incrObjectFieldBy('global', 'postCount', isDelete ? -1 : 1);
 
-				posts.getPostFields(pid, ['pid', 'tid', 'uid', 'content','timestamp'], function(err, postData) {
+				posts.getPostFields(pid, ['pid', 'tid', 'uid', 'content', 'timestamp'], function(err, postData) {
 					if (err) {
 						return callback(err);
 					}

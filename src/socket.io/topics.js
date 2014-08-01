@@ -26,11 +26,8 @@ SocketTopics.post = function(socket, data, callback) {
 		title: data.title,
 		content: data.content,
 		cid: data.category_id,
-		thumb:data.topic_thumb,
-		tags:data.tags,
-        lat:data.lat,
-        lng:data.lng,
-        cplace:data.cplace,
+		thumb: data.topic_thumb,
+		tags: data.tags,
 		req: websockets.reqFromSocket(socket)
 	}, function(err, result) {
 		if(err) {

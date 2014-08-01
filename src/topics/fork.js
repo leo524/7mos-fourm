@@ -14,7 +14,7 @@ var async = require('async'),
 
 module.exports = function(Topics) {
 
-	Topics.createTopicFromPosts = function(uid, title, pids,callback) {
+	Topics.createTopicFromPosts = function(uid, title, pids, callback) {
 		if (title) {
 			title = title.trim();
 		}

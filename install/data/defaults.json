@@ -70,9 +70,5 @@
     {
         "field": "requireEmailConfirmation",
         "value": 0
-    },
-    {
-        "field": "minimumCplaceLength",
-        "value": 1
     }
 ]

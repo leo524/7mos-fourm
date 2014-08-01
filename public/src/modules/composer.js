@@ -166,10 +166,7 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 				modified: false,
 				isMain: threadData.isMain,
 				topic_thumb: threadData.topic_thumb,
-				tags: threadData.tags,
-                lng:threadData.lng,
-                lat:threadData.lat,
-                cplace:threadData.cplace
+				tags: threadData.tags
 			});
 		});
 	};
@@ -218,6 +215,7 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 
 				tags.init(postContainer, composer.posts[post_uuid]);
 				updateTitle(postData, postContainer);
+
 				activate(post_uuid);
 				resize.reposition(postContainer);
 
@@ -259,7 +257,6 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 					preview.render(postContainer);
 				});
 
-
 				bodyEl.on('scroll', function() {
 					preview.matchScroll(postContainer);
 				});
@@ -297,47 +294,25 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 	}
 
 	function updateTitle(postData, postContainer) {
-		var titleEl = postContainer.find('.title'),
-            lngEl=postContainer.find('input#lng'),
-            latEl=postContainer.find('input#lat'),
-            cplaceEl=postContainer.find('input#flocation');
+		var titleEl = postContainer.find('.title');
 
 		if (parseInt(postData.tid, 10) > 0) {
-
 			translator.translate('[[topic:composer.replying_to, ' + postData.title + ']]', function(newTitle) {
 				titleEl.val(newTitle);
 			});
 			titleEl.prop('disabled', true);
 		} else if (parseInt(postData.pid, 10) > 0) {
-
 			titleEl.val(postData.title);
 			titleEl.prop('disabled', true);
-            lngEl.val(postData.lng);
-            latEl.val(postData.lat);
-            cplaceEl.val(postData.cplace);
-
-            lngEl.prop('disabled', true);
-            latEl.prop('disabled', true);
-            cplaceEl.prop('disabled', true);
 			socket.emit('modules.composer.editCheck', postData.pid, function(err, editCheck) {
 				if (!err && editCheck.titleEditable) {
 					titleEl.prop('disabled', false);
-                    lngEl.prop('disabled', false);
-                    latEl.prop('disabled', false);
-                    cplaceEl.prop('disabled', false);
 				}
 			});
 
 		} else {
-
 			titleEl.val(postData.title);
-            lngEl.val(postData.lng);
-            latEl.val(postData.lat);
-            cplaceEl.val(postData.cplace);
 			titleEl.prop('disabled', false);
-            lngEl.prop('disabled', false);
-            latEl.prop('disabled', false);
-            cplaceEl.prop('disabled', false);
 		}
 	}
 
@@ -365,20 +340,16 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 			postContainer = $('#cmp-uuid-' + post_uuid),
 			titleEl = postContainer.find('.title'),
 			bodyEl = postContainer.find('textarea'),
-            lngEl=postContainer.find('input#lng'),
-            latEl=postContainer.find('input#lat'),
-            cplaceEl=postContainer.find('input#flocation'),
-			thumbEl = postContainer.find('input#opic-thumb-url');
+			thumbEl = postContainer.find('input#topic-thumb-url');
 
 		titleEl.val(titleEl.val().trim());
 		bodyEl.val(bodyEl.val().trim());
-
-
 		if (thumbEl.length) {
 			thumbEl.val(thumbEl.val().trim());
 		}
 
 		var checkTitle = parseInt(postData.cid, 10) || parseInt(postData.pid, 10);
+
 		if (uploads.inProgress[post_uuid] && uploads.inProgress[post_uuid].length) {
 			return composerAlert('[[error:still-uploading]]');
 		} else if (checkTitle && titleEl.val().length < parseInt(config.minimumTitleLength, 10)) {
@@ -389,9 +360,7 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 			return composerAlert('[[error:invalid-title]]');
 		} else if (bodyEl.val().length < parseInt(config.minimumPostLength, 10)) {
 			return composerAlert('[[error:content-too-short, ' + config.minimumPostLength + ']]');
-        } else if (cplaceEl.val().length < parseInt(1, 10)) {
-             return composerAlert('[[error:cplace-too-short]]');
-        }
+		}
 
 		if (parseInt(postData.cid, 10) > 0) {
 			socket.emit('topics.post', {
@@ -399,10 +368,7 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 				content: bodyEl.val(),
 				topic_thumb: thumbEl.val() || '',
 				category_id: postData.cid,
-				tags: tags.getTags(post_uuid),
-                lat:latEl.val(),
-                lng:lngEl.val(),
-                cplace:cplaceEl.val()
+				tags: tags.getTags(post_uuid)
 			}, function(err, topic) {
 				done(err);
 				if (!err) {
@@ -421,10 +387,7 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 				content: bodyEl.val(),
 				title: titleEl.val(),
 				topic_thumb: thumbEl.val() || '',
-				tags: tags.getTags(post_uuid),
-                lat:latEl.val(),
-                lng:lngEl.val(),
-                cplace:cplaceEl.val()
+				tags: tags.getTags(post_uuid)
 			}, done);
 		}
 

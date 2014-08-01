@@ -1,6 +1,6 @@
 {
     "invalid-data": "无效数据",
-    "not-logged-in": "你还没有登录。",
+    "not-logged-in": "你还没有登陆。",
     "account-locked": "您的帐号已被临时锁定",
     "search-requires-login": "使用搜索需要先登录帐户！请登录或注册！",
     "invalid-cid": "无效的版块 ID",
@@ -50,6 +50,5 @@
     "uploads-are-disabled": "禁止上传",
     "upload-error": "上传错误：%1",
     "signature-too-long": "签名长度不能超过%1个字符",
-    "cant-chat-with-yourself": "不能和自己聊天",
-    "cplace-too-short": "请确认美食坐标。"
+    "cant-chat-with-yourself": "不能和自己聊天"
 }

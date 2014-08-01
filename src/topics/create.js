@@ -18,10 +18,8 @@ module.exports = function(Topics) {
 	Topics.create = function(data, callback) {
 		var uid = data.uid,
 			title = data.title,
-            lat =data.lat,
-            lng = data.lng,
-            cplace = data.cplace,
 			cid = data.cid;
+
 		db.incrObjectField('global', 'nextTid', function(err, tid) {
 			if (err) {
 				return callback(err);
@@ -49,10 +47,7 @@ module.exports = function(Topics) {
 				'viewcount': 0,
 				'locked': 0,
 				'deleted': 0,
-				'pinned': 0,
-                'lat':lat,
-                'lng':lng,
-                'cplace':cplace
+				'pinned': 0
 			};
 
 			if (data.thumb) {
@@ -84,15 +79,11 @@ module.exports = function(Topics) {
 		var uid = data.uid,
 			title = data.title,
 			content = data.content,
-            lat =data.lat,
-            lng = data.lng,
-            cplace = data.cplace,
 			cid = data.cid;
+
 		if (title) {
 			title = title.trim();
 		}
-
-
 
 		if (!title || title.length < parseInt(meta.config.minimumTitleLength, 10)) {
 			return callback(new Error('[[error:title-too-short, ' + meta.config.minimumTitleLength + ']]'));
@@ -130,9 +121,8 @@ module.exports = function(Topics) {
 				user.isReadyToPost(uid, next);
 			},
 			function(next) {
-				Topics.create({uid: uid, title: title, cid: cid, thumb: data.thumb, tags: data.tags,lng:lng,lat:lat,cplace:cplace}, next);
-
-				},
+				Topics.create({uid: uid, title: title, cid: cid, thumb: data.thumb, tags: data.tags}, next);
+			},
 			function(tid, next) {
 				Topics.reply({uid:uid, tid:tid, content:content, req: data.req}, next);
 			},

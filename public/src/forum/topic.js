@@ -148,7 +148,6 @@ define('forum/topic', dependencies, function(pagination, infinitescroll, threadT
 		}
 
 		socket.emit('topics.markAsRead', tid);
-        console.log("00000000000000"+data);
 		createNewPosts(data);
 	}
 

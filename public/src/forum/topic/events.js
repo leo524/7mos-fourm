@@ -38,7 +38,7 @@ define('forum/topic/events', ['forum/topic/browsing', 'forum/topic/postTools', '
 		'posts.downvote': togglePostVote,
 		'posts.unvote': togglePostVote,
 
-		'event:topic.toggleReply': toggleReply
+		'event:topic.toggleReply': toggleReply,
 	};
 
 	Events.init = function() {
@@ -87,21 +87,14 @@ define('forum/topic/events', ['forum/topic/browsing', 'forum/topic/postTools', '
 
 	function onPostEdited(data) {
 		var editedPostEl = $('#content_' + data.pid),
-			editedPostTitle = $('#topic_title_' + data.pid),
-            editedCplace = $('#cplace_' + data.pid);
+			editedPostTitle = $('#topic_title_' + data.pid);
+
 		if (editedPostTitle.length) {
 			editedPostTitle.fadeOut(250, function() {
 				editedPostTitle.html(data.title);
 				editedPostTitle.fadeIn(250);
 			});
 		}
-
-        if (editedCplace.length) {
-            editedCplace.fadeOut(250, function() {
-                editedCplace.html(data.cplace);
-                editedCplace.fadeIn(250);
-            });
-        }
 
 		editedPostEl.fadeOut(250, function() {
 			editedPostEl.html(data.content);

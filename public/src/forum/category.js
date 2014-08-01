@@ -3,6 +3,7 @@
 
 define('forum/category', ['composer', 'forum/pagination', 'forum/infinitescroll', 'share', 'navigator', 'forum/categoryTools'], function(composer, pagination, infinitescroll, share, navigator, categoryTools) {
 	var Category = {};
+
 	$(window).on('action:ajaxify.start', function(ev, data) {
 		if(data && data.url.indexOf('category') !== 0) {
 			navigator.hide();
