@@ -282,7 +282,6 @@ define('composer/uploads', ['composer/preview'], function(preview) {
 			postContainer = $('#cmp-uuid-' + post_uuid),
 			spinner = postContainer.find('.topic-thumb-spinner'),
 			thumbForm = postContainer.find('#thumbForm');
-
 		thumbForm.attr('action', params.route);
 
 		thumbForm.off('submit').submit(function() {

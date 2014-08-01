@@ -73,6 +73,9 @@ SocketModules.composer.push = function(socket, pid, callback) {
 				pid: pid,
 				body: postData.content,
 				title: results.topic.title,
+                lng:results.topic.lng,
+                lat:results.topic.lat,
+                cplace:results.topic.cplace,
 				topic_thumb: results.topic.thumb,
 				tags: results.tags,
 				isMain: results.isMain

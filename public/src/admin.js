@@ -1,5 +1,5 @@
 "use strict";
-/*global app, socket*/
+/*global app, socket */
 
 var admin = {};
 

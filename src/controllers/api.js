@@ -24,6 +24,7 @@ apiController.getConfig = function(req, res, next) {
 	config.maximumUsernameLength = meta.config.maximumUsernameLength;
 	config.minimumPasswordLength = meta.config.minimumPasswordLength;
 	config.maximumSignatureLength = meta.config.maximumSignatureLength;
+    config.minimumCplaceLength = meta.config.minimumCplaceLength;
 	config.useOutgoingLinksPage = parseInt(meta.config.useOutgoingLinksPage, 10) === 1;
 	config.allowGuestSearching = parseInt(meta.config.allowGuestSearching, 10) === 1;
 	config.allowFileUploads = parseInt(meta.config.allowFileUploads, 10) === 1;

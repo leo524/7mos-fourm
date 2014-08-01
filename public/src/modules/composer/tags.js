@@ -39,6 +39,7 @@ define('composer/tags', function() {
 		});
 
 		input.attr('tabIndex', tagEl.attr('tabIndex'));
+        input.attr('size', '15');
 		input.on('blur', function() {
 			triggerEnter(input);
 		});

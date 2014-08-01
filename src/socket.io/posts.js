@@ -19,6 +19,7 @@ var	async = require('async'),
 
 
 SocketPosts.reply = function(socket, data, callback) {
+
 	if(!data || !data.tid || !data.content) {
 		return callback(new Error('[[error:invalid-data]]'));
 	}
@@ -164,8 +165,12 @@ SocketPosts.edit = function(socket, data, callback) {
 	} else if (!data.content || data.content.length < parseInt(meta.config.minimumPostLength, 10)) {
 		return callback(new Error('[[error:content-too-short, ' + meta.config.minimumPostLength + ']]'));
 	}
+    else if( !data.cplace || data.cplace.length < parseInt(meta.config.minimumCplaceLength, 10)) {
+        return callback(new Error('[[error:cplace-too-short, ' + meta.config.maximumTitleLength + ']]'));
 
-	postTools.edit(socket.uid, data.pid, data.title, data.content, {topic_thumb: data.topic_thumb, tags: data.tags}, function(err, results) {
+    }
+
+	postTools.edit(socket.uid, data.pid, data.title, data.content,data.lng,data.lat,data.cplace, {topic_thumb: data.topic_thumb, tags: data.tags}, function(err, results) {
 		if(err) {
 			return callback(err);
 		}
@@ -174,9 +179,11 @@ SocketPosts.edit = function(socket, data, callback) {
 			pid: data.pid,
 			title: results.topic.title,
 			isMainPost: results.topic.isMainPost,
-			content: results.content
+			content: results.content,
+            lng:data.lng,
+            lat:data.lat,
+            cplace:data.cplace
 		});
-
 		callback();
 	});
 };

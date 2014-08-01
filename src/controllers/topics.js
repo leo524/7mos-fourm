@@ -143,7 +143,6 @@ topicsController.get = function(req, res, next) {
 					content: topicData.category.name
 				}
 			];
-
 			res.locals.linkTags = [
 				{
 					rel: 'alternate',

@@ -217,7 +217,7 @@ module.exports = function(Topics) {
 	};
 
 	Topics.getTopicDataByPid = function(pid, callback) {
-		posts.getPostField(pid, 'tid', function(err, tid) {
+       posts.getPostField(pid, 'tid', function(err, tid) {
 			Topics.getTopicData(tid, callback);
 		});
 	};
