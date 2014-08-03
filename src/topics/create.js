@@ -18,6 +18,9 @@ module.exports = function(Topics) {
 	Topics.create = function(data, callback) {
 		var uid = data.uid,
 			title = data.title,
+            lat =data.lat,
+            lng = data.lng,
+            cplace = data.cplace,
 			cid = data.cid;
 
 		db.incrObjectField('global', 'nextTid', function(err, tid) {
@@ -47,7 +50,10 @@ module.exports = function(Topics) {
 				'viewcount': 0,
 				'locked': 0,
 				'deleted': 0,
-				'pinned': 0
+				'pinned': 0,
+                'lat':lat,
+                'lng':lng,
+                'cplace':cplace
 			};
 
 			if (data.thumb) {
@@ -79,6 +85,9 @@ module.exports = function(Topics) {
 		var uid = data.uid,
 			title = data.title,
 			content = data.content,
+            lat =data.lat,
+            lng = data.lng,
+            cplace = data.cplace,
 			cid = data.cid;
 
 		if (title) {
@@ -118,8 +127,8 @@ module.exports = function(Topics) {
 				next();
 			},
 			function(next) {
-				Topics.create({uid: uid, title: title, cid: cid, thumb: data.thumb, tags: data.tags}, next);
-			},
+                Topics.create({uid: uid, title: title, cid: cid, thumb: data.thumb, tags: data.tags,lng:lng,lat:lat,cplace:cplace}, next);
+            },
 			function(tid, next) {
 				Topics.reply({uid:uid, tid:tid, content:content, req: data.req}, next);
 			},

@@ -18,7 +18,7 @@ var winston = require('winston'),
 
 (function(PostTools) {
 
-	PostTools.edit = function(uid, pid, title, content, options, callback) {
+    PostTools.edit = function(uid, pid, title, content,lng,lat,cplace, options, callback) {
 		options = options || {};
 
 		async.waterfall([
@@ -60,6 +60,9 @@ var winston = require('winston'),
 
 							var topicData = {
 								title: title,
+                                lng:lng,
+                                lat:lat,
+                                cplace:cplace,
 								slug: tid + '/' + utils.slugify(title)
 							};
 							if (options.topic_thumb) {

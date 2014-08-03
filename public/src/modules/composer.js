@@ -166,7 +166,10 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 				modified: false,
 				isMain: threadData.isMain,
 				topic_thumb: threadData.topic_thumb,
-				tags: threadData.tags
+				tags: threadData.tags,
+                lng:threadData.lng,
+                lat:threadData.lat,
+                cplace:threadData.cplace
 			});
 		});
 	};
@@ -294,7 +297,10 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 	}
 
 	function updateTitle(postData, postContainer) {
-		var titleEl = postContainer.find('.title');
+        var titleEl = postContainer.find('.title'),
+            lngEl=postContainer.find('input#lng'),
+            latEl=postContainer.find('input#lat'),
+            cplaceEl=postContainer.find('input#flocation');
 
 		if (parseInt(postData.tid, 10) > 0) {
 			titleEl.translateVal('[[topic:composer.replying_to, ' + postData.title + ']]');
@@ -302,15 +308,31 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 		} else if (parseInt(postData.pid, 10) > 0) {
 			titleEl.val(postData.title);
 			titleEl.prop('disabled', true);
+            lngEl.val(postData.lng);
+            latEl.val(postData.lat);
+            cplaceEl.val(postData.cplace);
+
+            lngEl.prop('disabled', true);
+            latEl.prop('disabled', true);
+            cplaceEl.prop('disabled', true);
 			socket.emit('modules.composer.editCheck', postData.pid, function(err, editCheck) {
 				if (!err && editCheck.titleEditable) {
 					titleEl.prop('disabled', false);
+                    lngEl.prop('disabled', false);
+                    latEl.prop('disabled', false);
+                    cplaceEl.prop('disabled', false);
 				}
 			});
 
 		} else {
-			titleEl.val(postData.title);
-			titleEl.prop('disabled', false);
+            titleEl.val(postData.title);
+            lngEl.val(postData.lng);
+            latEl.val(postData.lat);
+            cplaceEl.val(postData.cplace);
+            titleEl.prop('disabled', false);
+            lngEl.prop('disabled', false);
+            latEl.prop('disabled', false);
+            cplaceEl.prop('disabled', false);
 		}
 	}
 
@@ -338,6 +360,9 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 			postContainer = $('#cmp-uuid-' + post_uuid),
 			titleEl = postContainer.find('.title'),
 			bodyEl = postContainer.find('textarea'),
+            lngEl=postContainer.find('input#lng'),
+            latEl=postContainer.find('input#lat'),
+            cplaceEl=postContainer.find('input#flocation'),
 			thumbEl = postContainer.find('input#topic-thumb-url');
 
 		titleEl.val(titleEl.val().trim());
@@ -366,7 +391,10 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 				content: bodyEl.val(),
 				topic_thumb: thumbEl.val() || '',
 				category_id: postData.cid,
-				tags: tags.getTags(post_uuid)
+				tags: tags.getTags(post_uuid),
+                lat:latEl.val(),
+                lng:lngEl.val(),
+                cplace:cplaceEl.val()
 			}, function(err, topic) {
 				done(err);
 				if (!err) {
@@ -385,7 +413,10 @@ define('composer', dependencies, function(taskbar, controls, uploads, formatting
 				content: bodyEl.val(),
 				title: titleEl.val(),
 				topic_thumb: thumbEl.val() || '',
-				tags: tags.getTags(post_uuid)
+				tags: tags.getTags(post_uuid),
+                lat:latEl.val(),
+                lng:lngEl.val(),
+                cplace:cplaceEl.val()
 			}, done);
 		}
 
