@@ -1,0 +1,24 @@
+{
+	"password-reset-requested": "密码重置 - %1!",
+	"welcome-to": "欢迎加入 %1",
+
+	"greeting_no_name": "你好",
+	"greeting_with_name": "你好 %1",
+
+	"welcome.text1": "感谢你加入 %1",
+	"welcome.text2": "在你迫不及待的想分享和发现低调美食之前，请先激活你的注册邮箱地址.",
+	"welcome.cta": "点击激活",
+
+	"reset.text1": "如果你没有忘记密码或又是忽然记起来了, 请无视这封邮件.",
+	"reset.text2": "如果真的不争气忘记密码了，请点击:",
+	"reset.cta": "点击重置密码",
+
+	"digest.notifications": "You have some unread notifications from %1:",
+	"digest.latest_topics": "Latest topics from %1",
+	"digest.cta": "Click here to visit %1",
+	"digest.unsub.info": "This digest was sent to you due to your subscription settings.",
+	"digest.unsub.cta": "Click here to alter those settings",
+	"digest.daily.no_topics": "There have been no active topics in the past day",
+
+	"closing": "谢谢，我们都是吃货!"
+}
