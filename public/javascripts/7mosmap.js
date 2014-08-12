@@ -36,7 +36,19 @@ function addMapControl(){
  map.addControl(new BMap.OverviewMapControl());    
  map.addControl(new BMap.MapTypeControl()); 
  }
-    
+//判断使用终端
+
+function IsPC()
+{
+    var userAgentInfo = navigator.userAgent;
+    var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+    var flag = true;
+    for (var v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = false; break; }
+    }
+    return flag;
+}
+
 function findPlace(){
 	document.getElementById("confirmPlace").value="";
 var address=document.getElementById("inputMap3").value;
@@ -45,16 +57,37 @@ var local = new BMap.LocalSearch(map, {
   renderOptions:{map: map}
 });
 local.search(address);
-
+var useFlag = IsPC();
 //回调函数为每个maker 添加click事件，取得坐标
 local.setMarkersSetCallback(function (pois) {
 	for (var i = 0; i < pois.length; i++) {
 	    
 	    var lat = pois[i].point.lat;
 	    var lng = pois[i].point.lng;
+     /* if(useFlag==true){*/
+          pois[i].marker.addEventListener("click", function (e) {
+              gc.getLocation(e.point, function(rs){
+                  var title = e.target.K.title;
+                  var addComp = rs.addressComponents;
+                  sContent = addComp.province + ", " + addComp.city + ", " +addComp.district+","+ addComp.street + ", " + addComp.streetNumber+","+title ;
+                  document.getElementById("confirmPlace").value=sContent;
+                  document.getElementById("flocation").value=sContent;
+              });
+              document.getElementById("lat").value=e.point.lat;
+              document.getElementById("lng").value=e.point.lng;
+              /*弹出框
+               var infoWindow = new BMap.InfoWindow(sContent, { enableMessage: false });
+               this.openInfoWindow(infoWindow);*/
+              $.prompt.close();
 
-		pois[i].marker.addEventListener("click", function (e) {
-		    gc.getLocation(e.point, function(rs){
+          });
+
+      /*}else{
+          var tmpfun = map.onclick;
+          map.onclick = null;
+		pois[i].marker.addEventListener("touchend", function (e) {
+            map.onclick = tmpfun;
+           gc.getLocation(e.point, function(rs){
 		    	var title = e.target.K.title;
 		    	var addComp = rs.addressComponents;  
 		        sContent = addComp.province + ", " + addComp.city + ", " +addComp.district+","+ addComp.street + ", " + addComp.streetNumber+","+title ;
@@ -63,13 +96,13 @@ local.setMarkersSetCallback(function (pois) {
 		    });
 		     document.getElementById("lat").value=e.point.lat;
 			 document.getElementById("lng").value=e.point.lng;
-		    /*弹出框
+		    *//*弹出框
 			var infoWindow = new BMap.InfoWindow(sContent, { enableMessage: false });
-			this.openInfoWindow(infoWindow);*/
+			this.openInfoWindow(infoWindow);*//*
             $.prompt.close();
 
 		});
-           
+      }*/
 	   }
 	});
 }
