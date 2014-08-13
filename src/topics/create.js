@@ -98,7 +98,9 @@ module.exports = function(Topics) {
 			return callback(new Error('[[error:title-too-short, ' + meta.config.minimumTitleLength + ']]'));
 		} else if(title.length > parseInt(meta.config.maximumTitleLength, 10)) {
 			return callback(new Error('[[error:title-too-long, ' + meta.config.maximumTitleLength + ']]'));
-		}
+		}else if(cplace.length == 0 ){
+            return callback(new Error('[[error:cplace-too-short]]'));
+        }
 
 		async.waterfall([
 			function(next) {
