@@ -50,9 +50,9 @@ function IsPC()
 }
 
 function findPlace(){
-	document.getElementById("confirmPlace").value="";
+document.getElementById("confirmPlace").value="";
 var address=document.getElementById("inputMap3").value;
-var sContent="";
+
 var local = new BMap.LocalSearch(map, {
   renderOptions:{map: map}
 });
@@ -64,12 +64,12 @@ local.setMarkersSetCallback(function (pois) {
 	    
 	    var lat = pois[i].point.lat;
 	    var lng = pois[i].point.lng;
-     /* if(useFlag==true){*/
-          pois[i].marker.addEventListener("click", function (e) {
+      if(useFlag==true){
+          pois[i].marker.addEventListener("dblclick", function (e) {
               gc.getLocation(e.point, function(rs){
                   var title = e.target.K.title;
                   var addComp = rs.addressComponents;
-                  sContent = addComp.province + ", " + addComp.city + ", " +addComp.district+","+ addComp.street + ", " + addComp.streetNumber+","+title ;
+                 var sContent = addComp.province + ", " + addComp.city + ", " +addComp.district+","+ addComp.street + ", " + addComp.streetNumber+","+title ;
                   document.getElementById("confirmPlace").value=sContent;
                   document.getElementById("flocation").value=sContent;
               });
@@ -82,27 +82,54 @@ local.setMarkersSetCallback(function (pois) {
 
           });
 
-      /*}else{
-          var tmpfun = map.onclick;
-          map.onclick = null;
-		pois[i].marker.addEventListener("touchend", function (e) {
-            map.onclick = tmpfun;
-           gc.getLocation(e.point, function(rs){
+      }else{
+
+          //var tmpfun = map.onclick;
+          //map.onclick = null;
+          /*alert("test1");*/
+          pois[i].marker.addEventListener("click", function(e){
+              alert("test1");
+              var pt = e.point;
+              gc.getLocation(pt, function(rs){
+                  var addComp = rs.addressComponents;
+                  alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+              });
+          });
+        /* pois[i].marker.addEventListener("click", function (e) {
+
+             var i=0;
+             setTimeout(function(){
+                 gc.getLocation(e.point, function(rs){
+                    alert(e.point.lat+"===="+e.point.lng);
+                    var title = e.target.K.title;
+                    var addComp = rs.addressComponents;
+                    var sContent = addComp.province + ", " + addComp.city + ", " +addComp.district+","+ addComp.street + ", " + addComp.streetNumber+","+title ;
+                    alert(addComp.province);
+                    document.getElementById("confirmPlace").value=sContent;
+                    document.getElementById("flocation").value=sContent;
+                });
+               $.prompt.close();
+             },5000);
+
+          });*/
+
+          /* gc.getLocation(e.point, function(rs){
 		    	var title = e.target.K.title;
 		    	var addComp = rs.addressComponents;  
-		        sContent = addComp.province + ", " + addComp.city + ", " +addComp.district+","+ addComp.street + ", " + addComp.streetNumber+","+title ;
-		        document.getElementById("confirmPlace").value=sContent;
+		        var sContent = addComp.province + ", " + addComp.city + ", " +addComp.district+","+ addComp.street + ", " + addComp.streetNumber+","+title ;
+		       alert(addComp.province);
+               document.getElementById("confirmPlace").value=sContent;
 			    document.getElementById("flocation").value=sContent;
-		    });
-		     document.getElementById("lat").value=e.point.lat;
-			 document.getElementById("lng").value=e.point.lng;
-		    *//*弹出框
+		    });*/
+		  /*   document.getElementById("lat").value=e.point.lat;
+			 document.getElementById("lng").value=e.point.lng;*/
+		    /*弹出框
 			var infoWindow = new BMap.InfoWindow(sContent, { enableMessage: false });
-			this.openInfoWindow(infoWindow);*//*
-            $.prompt.close();
+			this.openInfoWindow(infoWindow);*/
 
-		});
-      }*/
+
+
+      }
 	   }
 	});
 }
